@@ -1,0 +1,29 @@
+name: 2D Auto Update Agent
+
+on:
+  schedule:
+    # တနင်္လာ မှ သောကြာ - မြန်မာစံတော်ချိန် 12:01 PM (UTC 05:31)
+    - cron: '31 5 * * 1-5'
+    # တနင်္လာ မှ သောကြာ - မြန်မာစံတော်ချိန် 4:30 PM (UTC 10:00)
+    - cron: '0 10 * * 1-5'
+  workflow_dispatch: 
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Install requirements
+        run: pip install requests
+        
+      - name: Run AI Agent Update Script
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python update_data.py
